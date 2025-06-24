@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@untangled/*": ["./node_modules/untangled-web/dist/*"],
+      "@untangled": ["./node_modules/untangled-web/dist"],
+      "@/*": ["./src/*"]
+    },
+    "types": ["./node_modules/untangled-web/dist/types"],
+    "experimentalDecorators": true,
+    "module": "commonjs",
+    "noImplicitOverride": true,
+    "esModuleInterop": true,
+    "target": "es6",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "outDir": "dist",
+    "resolveJsonModule": true
+  },
+  "lib": ["es2015"]
+}

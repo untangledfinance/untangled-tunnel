@@ -1,0 +1,47 @@
+{
+  "build": {
+    "context": ".",
+    "dockerfile": "Dockerfile",
+    "args": {
+      "WORKSPACE": "untangled-tunnel",
+      "NODE_VERSION": "22",
+      "USER": "dev"
+    }
+  },
+  "remoteUser": "dev",
+  "postAttachCommand": "bun install",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "yaml.schemas": {
+          "https://json.schemastore.org/github-workflow.json": "file:///workspaces/untangled-tunnel/.github/workflows/*.yaml"
+        },
+        "prettier.configPath": ".prettierrc",
+        "editor.tabSize": 2,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true
+      },
+      "extensions": [
+        "anweber.vscode-httpyac",
+        "DavidAnson.vscode-markdownlint",
+        "eamodio.gitlens",
+        "esbenp.prettier-vscode",
+        "kumar-harsh.graphql-for-vscode",
+        "mongodb.mongodb-vscode",
+        "mechatroner.rainbow-csv",
+        "ms-azuretools.vscode-docker",
+        "ms-toolsai.jupyter",
+        "oven.bun-vscode",
+        "redhat.vscode-yaml",
+        "shardulm94.trailing-spaces",
+        "tamasfe.even-better-toml",
+        "VisualStudioExptTeam.vscodeintellicode",
+        "YoavBls.pretty-ts-errors"
+      ]
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker": {}
+  },
+  "runArgs": ["--init", "--network=host"]
+}

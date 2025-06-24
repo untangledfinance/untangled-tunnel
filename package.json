@@ -1,0 +1,28 @@
+{
+  "name": "untangled-tunnel",
+  "version": "1.0.0",
+  "type": "module",
+  "lint-staged": {
+    "*": "prettier --ignore-unknown --write \"./(src|scripts)/**/*.(ts|js|json)\" \"./*.(ts|js|json)\""
+  },
+  "scripts": {
+    "dev": "bun --env-file=.env ./src/index.ts --hot",
+    "build": "bun build --target=node --outfile=./dist/index.js ./src/index.ts",
+    "start": "bun run build && node ./dist/index.js",
+    "format": "prettier --write \"./(src|scripts)/**/*.(ts|js|json)\" \"./*.(ts|js|json)\"",
+    "precommit": "lint-staged",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@slack/web-api": "^7.9.3",
+    "untangled-web": "^1.0.45"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.2.17",
+    "@types/mongoose": "^5.11.97",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.2",
+    "prettier": "^3.6.0",
+    "typescript": "^5.8.3"
+  }
+}

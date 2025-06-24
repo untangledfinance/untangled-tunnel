@@ -1,0 +1,16 @@
+{
+  "tunnel": {
+    "database": {
+      "host": "localhost",
+      "port": 27017,
+      "username": "admin",
+      "password": "password",
+      "name": "ssh",
+      "tls": false
+    },
+    "ssh": {
+      "hostKeyPath": "/home/dev/.ssh/id_rsa",
+      "port": 2222
+    }
+  }
+}

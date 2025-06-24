@@ -1,0 +1,17 @@
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *' # daily at 0:00 UTC
+
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+    name: Delete old images
+    steps:
+      - uses: snok/container-retention-policy@v3.0.0
+        with:
+          account: ${{ github.repository_owner }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          image-names: untangled-tunnel
+          image-tags: '*'
+          cut-off: 1w 3d

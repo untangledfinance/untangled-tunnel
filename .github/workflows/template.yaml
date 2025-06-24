@@ -1,0 +1,35 @@
+on:
+  workflow_call:
+    inputs:
+      ENV:
+        type: string
+      REGISTRY:
+        required: true
+        type: string
+      IMAGE_NAME:
+        required: true
+        type: string
+      VERSION:
+        type: string
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    name: 'Build & Push'
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Checkout ${{ github.repository }}
+        uses: actions/checkout@v4
+      - name: Build & push image
+        run: |
+          ENV=${{ inputs.ENV }}
+          VERSION=${{ inputs.VERSION }}
+          IMAGE_NAME=${{ inputs.REGISTRY }}/${{ inputs.IMAGE_NAME }}
+          [ -z $VERSION ] && VERSION=$(date +'%y.%m.%d-%H%M%S')-$(git rev-parse --short "$GITHUB_SHA")
+          DOCKERFILE=Dockerfile
+          [ -f $ENV.Dockerfile ] && DOCKERFILE=$ENV.Dockerfile
+          docker build -f $DOCKERFILE . -t $IMAGE_NAME:$VERSION --build-arg VERSION=$VERSION
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker push $IMAGE_NAME:$VERSION
