@@ -5,6 +5,7 @@ import * as bootLoaders from '@untangled/boot/loaders';
 import { Application, Module } from '@untangled/core/http';
 import { shutdown } from '@untangled/core/ioc';
 import { createSlackClient } from '@/config';
+import { TunnelController } from '@/controllers/tunnel';
 import { startTunnel, TunnelConfigs } from '@/tunnel';
 
 @Auto
@@ -20,7 +21,9 @@ import { startTunnel, TunnelConfigs } from '@/tunnel';
     },
   })
 )
-@Module()
+@Module({
+  controllers: [TunnelController],
+})
 class App extends Application {
   async onInit() {
     this.on('started', async () => {
@@ -33,6 +36,10 @@ class App extends Application {
   }
 }
 
-$(App)
-  .start({})
-  .then(() => process.on('SIGINT', shutdown).on('SIGTERM', shutdown));
+async function start() {
+  await $(App).start({
+    port: Configs.app.port,
+  });
+}
+
+start().then(() => process.on('SIGINT', shutdown).on('SIGTERM', shutdown));
