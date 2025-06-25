@@ -101,7 +101,7 @@ export async function revokeAccess(
       username,
     },
     {
-      $pullAll: {
+      $pull: {
         accesses: {
           alias: {
             $in: access,

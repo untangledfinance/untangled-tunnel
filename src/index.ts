@@ -5,7 +5,7 @@ import * as bootLoaders from '@untangled/boot/loaders';
 import { Application, Module } from '@untangled/core/http';
 import { shutdown } from '@untangled/core/ioc';
 import { createSlackClient } from '@/config';
-import { TunnelController } from '@/controllers/tunnel';
+import { TunnelController } from '@/controllers';
 import { startTunnel, TunnelConfigs } from '@/tunnel';
 
 @Auto
@@ -16,6 +16,7 @@ import { startTunnel, TunnelConfigs } from '@/tunnel';
   bootLoaders.bean({
     database: true,
     jwt: true,
+    rbac: true,
     new: async (configs) => {
       await createSlackClient(configs);
     },
