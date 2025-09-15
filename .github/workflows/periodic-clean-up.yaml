@@ -14,4 +14,5 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           image-names: untangled-tunnel
           image-tags: '*'
+          skip-tags: 'latest'
           cut-off: 1w 3d

@@ -9,4 +9,4 @@ COPY src/ src/
 ENV ENV=prod
 ARG VERSION
 ENV VERSION=${VERSION}
-ENTRYPOINT [ "bun", "--hot", "./src/index.ts" ]
+ENTRYPOINT [ "bun", "./src/index.ts" ]

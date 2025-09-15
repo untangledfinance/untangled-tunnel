@@ -1,1 +1,1 @@
-export * as TunnelService from '@/services/tunnel';
+export * as TunnelService from './tunnel';

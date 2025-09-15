@@ -7,6 +7,7 @@
     },
     "types": ["./node_modules/untangled-web/dist/types"],
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "module": "commonjs",
     "noImplicitOverride": true,
     "esModuleInterop": true,

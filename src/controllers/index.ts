@@ -1,1 +1,1 @@
-export * from '@/controllers/tunnel';
+export * from './tunnel';

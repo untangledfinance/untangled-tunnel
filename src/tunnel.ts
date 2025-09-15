@@ -55,11 +55,6 @@ export type TunnelConfigs = {
 };
 
 /**
- * SSH {@link Server} that can be created as a {@link Bean}.
- */
-export const SSHServer = Bean(Server, 'SSHServer');
-
-/**
  * A {@link Mongo} database used only for tunneling configurations.
  */
 @Singleton
@@ -68,9 +63,8 @@ class TunnelMongo extends Mongo {}
 /**
  * Returns a {@link Mongo} instance for tunneling if enabled.
  */
-export function tunnelDatabase(): NullableType<Mongo> {
-  const { tunnel } = (Configs.env as TunnelConfigs) ?? {};
-  const { database: dbConfigs } = tunnel ?? {};
+export function tunnelDatabase(configs?: TunnelConfigs): NullableType<Mongo> {
+  const { database: dbConfigs } = configs?.tunnel ?? {};
   const db =
     dbConfigs &&
     new TunnelMongo({
@@ -85,12 +79,18 @@ export function tunnelDatabase(): NullableType<Mongo> {
 }
 
 /**
- * Creates an SSH {@link Server} that supports remote port forwarding.
+ * SSH {@link Server} that can be created as a {@link Bean}.
  */
-export async function startTunnel({ tunnel: configs }: TunnelConfigs) {
-  const db = tunnelDatabase();
+export const SSHServer = Bean(Server, 'SSHServer');
+
+/**
+ * Starts an {@link SSHServer} that supports remote port forwarding.
+ * @param configs tunneling configurations.
+ */
+export async function start(configs?: TunnelConfigs) {
+  const db = tunnelDatabase(configs);
   db && (await db.onInit());
-  const { hostKeyPath, port } = configs?.ssh ?? {};
+  const { hostKeyPath, port } = configs?.tunnel?.ssh ?? {};
   const server = new SSHServer({
     port,
     hostKeyPath,

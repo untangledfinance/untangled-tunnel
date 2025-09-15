@@ -1,12 +1,8 @@
-import '@untangled';
-
-import { Boot } from '@untangled/boot';
+import { boot, Boot } from '@untangled/boot';
 import * as bootLoaders from '@untangled/boot/loaders';
 import { Application, Module } from '@untangled/core/http';
-import { shutdown } from '@untangled/core/ioc';
-import { createSlackClient } from '@/config';
 import { TunnelController } from '@/controllers';
-import { startTunnel, TunnelConfigs } from '@/tunnel';
+import { start, TunnelConfigs } from '@/tunnel';
 
 @Auto
 @Boot(
@@ -14,12 +10,13 @@ import { startTunnel, TunnelConfigs } from '@/tunnel';
     externalConfigFiles: process.env['X_CFG_FLS']?.split(','),
   }),
   bootLoaders.bean({
-    database: true,
+    database: {
+      mongo: true,
+    },
     jwt: true,
     rbac: true,
-    new: async (configs) => {
-      await createSlackClient(configs);
-    },
+    slack: true,
+    safeExit: true,
   })
 )
 @Module({
@@ -27,20 +24,16 @@ import { startTunnel, TunnelConfigs } from '@/tunnel';
 })
 class App extends Application {
   async onInit() {
-    this.on('started', async () => {
-      await startTunnel(Configs.env as TunnelConfigs);
+    await start(Configs.env as TunnelConfigs);
+    return this.start({
+      host: Configs.app.host,
+      port: Configs.app.port,
     });
   }
 
   async onStop() {
-    await this.stop();
+    return this.stop();
   }
 }
 
-async function start() {
-  await $(App).start({
-    port: Configs.app.port,
-  });
-}
-
-start().then(() => process.on('SIGINT', shutdown).on('SIGTERM', shutdown));
+boot(App);
